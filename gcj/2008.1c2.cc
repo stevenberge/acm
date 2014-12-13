@@ -18,18 +18,18 @@ int div(vector<vector<vector<int> > > &ys, int a[], int l, int r, int m){
   if(m == 5) return  a[r]%5;
   if(ys[l][r][m==3] >=0 ) return ys[l][r][m==3];
   if(l==r) return ys[l][r][m==3] = a[l]%m;
-  if(m == 3)  return ys[l][r][m==3] = (div(ys, a, l, r-1, m) + a[r] )%m; 
-  if(m == 7) return ys[l][r][m==3] = (div(ys, a, l, r-1, m)*10 + a[r] )%m;
+  int t = div(ys, a, l, r-1, m);
+  if(m == 3)  return ys[l][r][m==3] = (t + a[r])%m; 
+  if(m == 7) return  ys[l][r][m==3] = (t*10 + a[r])%m;
 }
 
 // 状态转移： cnt[0, i][k] = E{ merge([0, j-1][k1], [j, i][k2]), j=0~i, 
 //   k1+k2=>k or k1-k2=>k or j=0 && k2=k}
 // 状态压缩, k压缩了区间[l, r]对2,3,5,7的余数, [2,3,5,7] => 210
 ll dp(int a[], int n){
-
   vector<vector<ll> > cnt(n, vector<ll>(210, 0));
   vector<vector<vector<int> > > ys(n, 
-      vector<vector<int> >(n, vector<int>(2, -1)));
+  vector<vector<int> >(n, vector<int>(2, -1)));
 
   for(int i=0; i<n; i++){
     // [0, i] => [0,j-1], [j, i]
