@@ -9,11 +9,9 @@ using namespace std;
 
 typedef long long int ll;
 
-/**
 // 大整数取余数,记忆化搜索
 // ys 缓存 [l, r] 对3 7的余数
 // m =2, 3, 5, 7
-**/
 int div(vector<vector<vector<int> > > &ys, int a[], int l, int r, int m){
   assert(l<=r);
   if(m == 2) return  a[r]%2;
@@ -24,11 +22,9 @@ int div(vector<vector<vector<int> > > &ys, int a[], int l, int r, int m){
   if(m == 7) return ys[l][r][m==3] = (div(ys, a, l, r-1, m)*10 + a[r] )%m;
 }
 
-/**
 // 状态转移： cnt[0, i][k] = E{ merge([0, j-1][k1], [j, i][k2]), j=0~i, 
 //   k1+k2=>k or k1-k2=>k or j=0 && k2=k}
 // 状态压缩, k压缩了区间[l, r]对2,3,5,7的余数, [2,3,5,7] => 210
-**/
 ll dp(int a[], int n){
 
   vector<vector<ll> > cnt(n, vector<ll>(210, 0));
@@ -36,7 +32,6 @@ ll dp(int a[], int n){
       vector<vector<int> >(n, vector<int>(2, -1)));
 
   for(int i=0; i<n; i++){
-
     // [0, i] => [0,j-1], [j, i]
     for(int j = i; j>=0; j--){
 
@@ -45,13 +40,11 @@ ll dp(int a[], int n){
           d3 = div(ys, a, j, i, 3), 
           d5 = div(ys, a, j, i, 5), 
           d7 = div(ys, a, j, i, 7);
-      //cout<<j<<"->"<<i<<":"<<d2<<","<<d3<<","<<d5<<","<<d7<<endl;
 
       if(j==0){
         int d = 105*d2+35*d3+7*d5+d7;
         cnt[i][d] += 1;
       }
-
       else
         for(int k = 0; k<210; k++){
 
