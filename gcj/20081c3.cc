@@ -10,7 +10,7 @@ using namespace std;
 
 typedef long long int ll;
 #define MOD 1000000007
-
+// 离散化原序列，变成线段树上的点
 ll tree[2000000];
 int get(int l, int r, int idx, int a, int b){
   assert(idx>=0 && idx<2000000);
@@ -18,9 +18,9 @@ int get(int l, int r, int idx, int a, int b){
   int mid =(l+r)/2;
   ll x = 0;
   if(a<=mid)
-  x += get(l, mid, idx*2+1, a, min(b, mid));
+    x += get(l, mid, idx*2+1, a, min(b, mid));
   if(b>mid)
-  x += get(mid+1, r, idx*2+2, max(a, mid+1), b);
+    x += get(mid+1, r, idx*2+2, max(a, mid+1), b);
   return x%MOD;
 }
 int add(int l, int r, int idx, int a, int d){
@@ -30,6 +30,7 @@ int add(int l, int r, int idx, int a, int d){
     if(a<=mid) r=mid, idx=idx*2+1;
     else l = mid+1, idx=idx*2+2;
   }
+  assert(l==a);
   tree[idx]+=d, tree[idx]%=MOD;
   while(idx!=i0){
     int p = (idx-1)/2, sib=4*p+3-idx;
@@ -44,7 +45,7 @@ void init(int l, int r, int idx){
   if(l==r) { tree[idx] = 0; return; }
   int mid =(l+r)/2;
   init(l, mid, idx*2+1);
-  init(mid+1, r, idx*2+r);
+  init(mid+1, r, idx*2+2);//@error: idx*2+2, not idx*2+r
   tree[idx] = 0;//tree[idx*2+1]+tree[idx*2+2]; tree[idx] %= MOD;
 }
 
@@ -67,8 +68,8 @@ int main(){
 
     // li san hua
     memcpy(b, d, sizeof(d));
+    // for(int j = 0; j<n; j++) cout<<b[j]<<" ";cout<<endl;
     sort(b, b+n);
-    //for(int j = 0; j<n; j++) cout<<b[j]<<" ";cout<<endl;
     assert(b[0]<=b[n-1]);
 
     map<int, int> mp;
@@ -89,7 +90,7 @@ int main(){
       if(num>0) cnt = get(0, idx-1, 0, 0, num-1) ;
       add(0, idx-1, 0, num, cnt+1);
     }
-    cout<<"Case #"<<i<<": "<<get(0, idx-1, 0, 0, idx-1)<<endl;
+    cout<<"Case #"<<i+1<<": "<<get(0, idx-1, 0, 0, idx-1)<<endl;
   }
   return 0;
 }
