@@ -46,6 +46,7 @@ int add(int l, int r, int idx, int a, int d)
         idx = p;
     }
 }
+
 void init(int l, int r, int idx){
     //assert(l <= r && idx >= 0 && idx < MAXN);
     if(l==r) { 
